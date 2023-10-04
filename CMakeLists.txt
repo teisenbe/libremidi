@@ -2,11 +2,11 @@ cmake_minimum_required(VERSION 3.9 FATAL_ERROR)
 project(libremidi CXX)
 
 option(LIBREMIDI_HEADER_ONLY "Header-only mode" OFF)
-option(LIBREMIDI_NO_COREMIDI "Disable CoreMidi back-end" OFF)
-option(LIBREMIDI_NO_WINMM "Disable WinMM back-end" OFF)
+option(LIBREMIDI_NO_COREMIDI "Disable CoreMidi back-end" ON)
+option(LIBREMIDI_NO_WINMM "Disable WinMM back-end" ON)
 option(LIBREMIDI_NO_WINUWP "Disable UWP back-end" ON)
 option(LIBREMIDI_NO_JACK "Disable JACK back-end" OFF)
-option(LIBREMIDI_NO_ALSA "Disable ALSA back-end" OFF)
+option(LIBREMIDI_NO_ALSA "Disable ALSA back-end" ON)
 option(LIBREMIDI_EXAMPLES "Enable examples" OFF)
 
 include(CheckSymbolExists)
@@ -14,11 +14,14 @@ include(CheckSymbolExists)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
+add_compile_options("-Wno-error=multichar")
+add_compile_options("-Wno-error=sign-compare" "-Wno-error=deprecated-declarations" "-Wno-error=unused-result" "-Wno-error=unused-parameter" "-Wno-error=unused-variable")
 if(LIBREMIDI_HEADER_ONLY)
   add_library(libremidi INTERFACE)
   set(_public INTERFACE)
   target_compile_definitions(libremidi ${_public} LIBREMIDI_HEADER_ONLY)
 else()
+
   add_library(libremidi
     include/libremidi/detail/alsa.hpp
     include/libremidi/detail/coreaudio.hpp
